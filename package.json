@@ -1,0 +1,20 @@
+{
+  "name": "ritm-date",
+  "version": "1.0.0",
+  "description": "date & time formatter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "7hndr"
+  },
+  "keywords": [
+    "date",
+    "time",
+    "formatter"
+  ],
+  "author": "7hndr",
+  "license": "ISC"
+}

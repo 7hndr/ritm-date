@@ -1,191 +1,191 @@
+import names from './names.js'
+
 export default class RitmDate {
-  constructor (initialDate = null) {
-    this.date = initialDate ? new Date(initialDate) : null
-    this.offset = new Date().getTimezoneOffset() / 60
-    this.weekDayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
-    this.monthNames = [
-      'Январь',
-      'Февраль',
-      'Март',
-      'Апрель',
-      'Май',
-      'Июнь',
-      'Июль',
-      'Август',
-      'Сентябрь',
-      'Октябрь',
-      'Ноябрь',
-      'Декабрь'
-    ]
-    this.userOffset = null
-    this.spare = '—'
-    this.parsed = null
-    this.result = null
-    this.ISO = null
-    this.units = {
-      day: 24 * 60 * 60 * 1000,
-      hour: 60 * 60 * 1000,
-      minute: 60 * 1000
-    }
-  }
+	constructor(initialDate = null) {
+		this.date = initialDate ? new Date(initialDate) : null
+	}
 
-  _reset () {
-    this.spare = '—'
-    this.date = null
-    this.parsed = null
-    this.userOffset = null
-  }
+	#offset = new Date().getTimezoneOffset() / 60
+	#userOffset = null
+	#locale = 'en'
+	#availableLocales = ['en', 'ru']
+	#spare = '—'
+	#timestamp = null
+	#ISO = null
 
-  _isValid (d) {
-    const date = new Date(d)
-    return d && !isNaN(Date.parse(date))
-  }
+	#units = {
+		day: 86400000,
+		days: 86400000,
+		hour: 3600000,
+		hours: 3600000,
+		minutes: 60000,
+		minute: 60000
+	}
 
-  _parseMask (m, parsedDate) {
-    let mask = m
-    const keys = Object.keys(parsedDate)
-    keys.forEach(k => {
-      mask = mask.replace(k, parsedDate[k])
-    })
+	#logError(error) {
+		console.warn(`Incorrect ${error}!`)
+	}
 
-    this._reset()
-    return mask
-  }
+	#reset() {
+		this.#spare = '—'
+		this.date = null
+		this.#timestamp = null
+		this.#userOffset = null
+	}
 
-  _split (date, offset, userOffset) {
-    const twoDigit = v => {
-      return v >= 10 ? v : `0${v}`
-    }
+	#parseMask(m, parsedDate) {
+		let mask = m
+		const keys = Object.keys(parsedDate)
 
-    const getOffset = (offset, userOffset) => {
-      const os = userOffset ?? offset
-      const h = Math.abs(Math.floor(os))
-      const m = Math.abs((os % 1).toFixed(1) * 10)
-      return `${os >= 0 ? '-' : '+'}${twoDigit(h)}:${twoDigit(m)}`
-    }
+		keys.forEach(k => {
+			mask = mask.replace(k, parsedDate[k])
+		})
 
-    if (typeof userOffset === 'number') {
-      const h = date.getHours()
-      const abs = Math.abs(userOffset)
-      const o = userOffset >= 0 ? h - abs : h + abs
-      date.setHours(offset + o)
-    }
+		this.#reset()
+		return mask
+	}
 
-    const year = date.getFullYear()
-    const month = date.getMonth()
-    const dateNumber = date.getDate()
-    const day = date.getDay()
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const seconds = date.getSeconds()
+	#split(date, offset, userOffset) {
+		const twoDigit = v => {
+			return v >= 10 ? v : `0${v}`
+		}
 
-    return {
-      YYYY: year,
-      YY: String(year).slice(2, 4),
-      MMMM: this.monthNames[month],
-      MMM: this.monthNames[month]?.slice(0, 3),
-      MM: twoDigit(month + 1),
-      M: month + 1,
-      DD: twoDigit(dateNumber),
-      D: dateNumber,
-      dd: this.weekDayNames[day],
-      HH: twoDigit(hours),
-      h: hours % 12 || 12,
-      mm: twoDigit(minutes),
-      ss: twoDigit(seconds),
-      offset: getOffset(offset, userOffset),
-      _instance: date
-    }
-  }
+		const getOffset = (offset, userOffset) => {
+			const os = userOffset ?? offset
+			const h = Math.abs(Math.floor(os))
+			const m = Math.abs((os % 1).toFixed(1) * 10)
+			return `${os >= 0 ? '-' : '+'}${twoDigit(h)}:${twoDigit(m)}`
+		}
 
-  getIso (parsedDate) {
-    const { YYYY, MM, DD, HH, mm, ss, offset } = parsedDate
-    return `${YYYY}-${MM}-${DD}T${HH}:${mm}:${ss}${offset}`
-  }
+		if (typeof userOffset === 'number') {
+			const h = date.getHours()
+			const abs = Math.abs(userOffset)
+			const o = userOffset >= 0 ? h - abs : h + abs
+			date.setHours(offset + o)
+		}
 
-  format (d, m, spare) {
-    if (arguments.length === 1 && typeof d === 'string' && !this._isValid(d)) {
-      m = d
-      d = undefined
-    }
-    if (spare) this.spare = spare
+		const year = date.getFullYear()
+		const month = date.getMonth()
+		const dateNumber = date.getDate()
+		const day = date.getDay()
+		const hours = date.getHours()
+		const minutes = date.getMinutes()
+		const seconds = date.getSeconds()
+		const monthNames = names.months[this.#locale]
+		const weekNames = names.weeks[this.#locale]
 
-    if (!d && !this._isValid(this.date)) return this.spare
-    if (d && !this.date) {
-      this.date = new Date(d)
-    }
-    this.parsed = Date.parse(this.date)
+		return {
+			YYYY: year,
+			YY: String(year).slice(2, 4),
+			MMMM: monthNames.full[month],
+			MMM: monthNames.short[month],
+			MM: twoDigit(month + 1),
+			M: month + 1,
+			DD: twoDigit(dateNumber),
+			D: dateNumber,
+			ddd: weekNames.full[day],
+			dd: weekNames.short[day],
+			HH: twoDigit(hours),
+			h: hours % 12 || 12,
+			mm: twoDigit(minutes),
+			ss: twoDigit(seconds),
+			offset: getOffset(offset, userOffset),
+			_instance: date
+		}
+	}
 
-    if (m === 'x') return this.parsed
+	#getIso(parsedDate) {
+		const { YYYY, MM, DD, HH, mm, ss, offset } = parsedDate
+		return `${YYYY}-${MM}-${DD}T${HH}:${mm}:${ss}${offset}`
+	}
 
-    const { offset, userOffset, date } = this
-    const parsedDate = this._split(date, offset, userOffset)
+	format(mask) {
+		if (!this.isValid(this.date)) return this.#spare
 
-    this.ISO = this.getIso(parsedDate)
+		this.#timestamp = Date.parse(this.date)
 
-    if (m?.toUpperCase() === 'ISO') {
-      this._reset()
+		if (mask === 'x' || mask === 'X') return this.#timestamp
 
-      return this.ISO
-    } else {
-      let mask
-      if (m !== 'l') {
-        mask = m || 'DD.MM.YYYY • HH:mm'
-      } else mask = 'D/M/YY'
-      return this._parseMask(mask, parsedDate)
-    }
-  }
+		const parsedDate = this.#split(this.date, this.#offset, this.#userOffset)
 
-  // Chaining items
-  zone (offset) {
-    this.userOffset = offset
-    return this
-  }
+		this.#ISO = this.#getIso(parsedDate)
 
-  calc (quantity, unit, date) {
-    this.date = date
-      ? this._isValid(date)
-        ? new Date(date)
-        : this.date
-      : this.date
+		if (mask?.toUpperCase() === 'ISO') {
+			this.#reset()
 
-    if (!this.date) return this
+			return this.#ISO
+		} else {
+			if (mask !== 'l') {
+				mask = mask || 'DD.MM.YYYY • HH:mm'
+			} else mask = 'D/M/YY'
+			return this.#parseMask(mask, parsedDate)
+		}
+	}
 
-    const u = this.units[unit]
-    const time = this.date.getTime()
-    this.date.setTime(time + quantity * u)
+	// Chaining items
+	zone(offset) {
+		if (typeof offset !== 'number') {
+			this.#logError('zone offset, must be number')
+		} else {
+			this.userOffset = offset
+		}
+		return this
+	}
 
-    return this
-  }
+	setSpare(spare) {
+		if (typeof spare !== 'string') {
+			this.#logError('spare, must be string')
+		} else {
+			this.#spare = spare
+		}
+		return this
+	}
 
-  zeroing (date) {
-    this.date = date
-      ? this._isValid(date)
-        ? new Date(date)
-        : this.date
-      : this.date
+	setLocale(locale) {
+		if (this.#availableLocales.includes(locale)) {
+			this.#locale = locale
+		} else {
+			this.#logError('localization')
+		}
+		return this
+	}
 
-    if (!this.date) return this
+	calc(quantity, unit) {
+		if (this.isValid(this.date)) {
+			const u = this.#units[unit]
+			const time = this.date.getTime()
+			this.date.setTime(time + quantity * u)
+		}
+		return this
+	}
 
-    this.date.setHours(0)
-    this.date.setMinutes(0)
-    this.date.setSeconds(0)
-    return this
-  }
+	zeroing() {
+		if (this.isValid(this.date)) {
+			this.date.setHours(0)
+			this.date.setMinutes(0)
+			this.date.setSeconds(0)
+		}
+		return this
+	}
 
-  // Other
+	// Utils
 
-  secondsToTime (initial) {
-    const twoDigit = v => {
-      return v >= 10 ? v : `0${v}`
-    }
+	isValid(d) {
+		const date = new Date(d)
+		return d && !isNaN(Date.parse(date))
+	}
 
-    const hours = Math.floor(initial / (60 * 60))
-    const divisor_for_minutes = initial % (60 * 60)
-    const minutes = Math.floor(divisor_for_minutes / 60)
-    const divisor_for_seconds = divisor_for_minutes % 60
-    const seconds = Math.ceil(divisor_for_seconds)
+	secondsToTime(initial) {
+		const twoDigit = v => {
+			return v >= 10 ? v : `0${v}`
+		}
 
-    return `${twoDigit(hours)}:${twoDigit(minutes)}:${twoDigit(seconds)}`
-  }
+		const hours = Math.floor(initial / (60 * 60))
+		const divisor_for_minutes = initial % (60 * 60)
+		const minutes = Math.floor(divisor_for_minutes / 60)
+		const divisor_for_seconds = divisor_for_minutes % 60
+		const seconds = Math.ceil(divisor_for_seconds)
+
+		return `${twoDigit(hours)}:${twoDigit(minutes)}:${twoDigit(seconds)}`
+	}
 }

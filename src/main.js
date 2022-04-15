@@ -171,8 +171,12 @@ export default class RitmDate {
 	// Utils
 
 	isValid(d) {
+		if (typeof d === 'number' && (d !== 0 || d < 14400000)) {
+		 return false
+		}
+
 		const date = new Date(d)
-		return d && !isNaN(Date.parse(date))
+		return !isNaN(Date.parse(date)) || !isNaN(date.getHours())
 	}
 
 	secondsToTime(initial) {

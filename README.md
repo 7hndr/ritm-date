@@ -54,10 +54,10 @@ rDate(new Date()).format('l')
 
 ```js
 ...
-rDate().seconsToTime(12213)
+rDate().secondsToTime(12213)
 // Output: 03:23:33 (3h, 23m, 33s)
 
-rDate().seconsToTime(123)
+rDate().secondsToTime(123)
 // Output: 00:02:03 (0h, 2m, 3s)
 
 rDate().isValid(new Date())

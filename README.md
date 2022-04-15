@@ -1,6 +1,8 @@
 # ritm-date
 
-Really lightweight fast date &amp; time formatter
+[![npm version](https://badge.fury.io/js/ritm-date.svg)](https://badge.fury.io/js/ritm-date)
+
+Really lightweight, fast date &amp; time formatter
 
 1. npm install ritm-date
 2. import rDate from 'ritm-date' at your .js file

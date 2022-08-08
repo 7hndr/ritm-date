@@ -5,15 +5,15 @@ export default class RitmDate {
 		this.date = initialDate ? new Date(initialDate) : null
 	}
 
-	#offset = new Date().getTimezoneOffset() / 60
-	#userOffset = null
-	#locale = 'en'
-	#availableLocales = ['en', 'ru']
-	#spare = '—'
-	#timestamp = null
-	#ISO = null
+	_offset = new Date().getTimezoneOffset() / 60
+	_userOffset = null
+	_locale = 'en'
+	_availableLocales = ['en', 'ru']
+	_spare = '—'
+	_timestamp = null
+	_ISO = null
 
-	#units = {
+	_units = {
 		day: 86400000,
 		days: 86400000,
 		hour: 3600000,
@@ -22,18 +22,18 @@ export default class RitmDate {
 		minute: 60000
 	}
 
-	#logError(error) {
+	_logError(error) {
 		console.warn(`Incorrect ${error}!`)
 	}
 
-	#reset() {
-		this.#spare = '—'
+	_reset() {
+		this._spare = '—'
 		this.date = null
-		this.#timestamp = null
-		this.#userOffset = null
+		this._timestamp = null
+		this._userOffset = null
 	}
 
-	#parseMask(m, parsedDate) {
+	_parseMask(m, parsedDate) {
 		let mask = m
 		const keys = Object.keys(parsedDate)
 
@@ -41,11 +41,11 @@ export default class RitmDate {
 			mask = mask.replace(k, parsedDate[k])
 		})
 
-		this.#reset()
+		this._reset()
 		return mask
 	}
 
-	#split(date, offset, userOffset) {
+	_split(date, offset, userOffset) {
 		const twoDigit = v => {
 			return v >= 10 ? v : `0${v}`
 		}
@@ -71,8 +71,8 @@ export default class RitmDate {
 		const hours = date.getHours()
 		const minutes = date.getMinutes()
 		const seconds = date.getSeconds()
-		const monthNames = names.months[this.#locale]
-		const weekNames = names.weeks[this.#locale]
+		const monthNames = names.months[this._locale]
+		const weekNames = names.weeks[this._locale]
 
 		return {
 			YYYY: year,
@@ -94,65 +94,65 @@ export default class RitmDate {
 		}
 	}
 
-	#getIso(parsedDate) {
+	_getIso(parsedDate) {
 		const { YYYY, MM, DD, HH, mm, ss, offset } = parsedDate
 		return `${YYYY}-${MM}-${DD}T${HH}:${mm}:${ss}${offset}`
 	}
 
 	format(mask) {
-		if (!this.isValid(this.date)) return this.#spare
+		if (!this.isValid(this.date)) return this._spare
 
-		this.#timestamp = Date.parse(this.date)
+		this._timestamp = Date.parse(this.date)
 
-		if (mask === 'x' || mask === 'X') return this.#timestamp
+		if (mask === 'x' || mask === 'X') return this._timestamp
 
-		const parsedDate = this.#split(this.date, this.#offset, this.#userOffset)
+		const parsedDate = this._split(this.date, this._offset, this._userOffset)
 
-		this.#ISO = this.#getIso(parsedDate)
+		this._ISO = this._getIso(parsedDate)
 
 		if (mask?.toUpperCase() === 'ISO') {
-			this.#reset()
+			this._reset()
 
-			return this.#ISO
+			return this._ISO
 		} else {
 			if (mask !== 'l') {
 				mask = mask || 'DD.MM.YYYY • HH:mm'
 			} else mask = 'D/M/YY'
-			return this.#parseMask(mask, parsedDate)
+			return this._parseMask(mask, parsedDate)
 		}
 	}
 
 	// Chaining items
 	zone(offset) {
 		if (typeof +offset !== 'number') {
-			this.#logError('zone offset, must be number')
+			this._logError('zone offset, must be number')
 		} else {
-			this.#userOffset = +offset
+			this._userOffset = +offset
 		}
 		return this
 	}
 
 	setSpare(spare) {
 		if (typeof spare !== 'string') {
-			this.#logError('spare, must be string')
+			this._logError('spare, must be string')
 		} else {
-			this.#spare = spare
+			this._spare = spare
 		}
 		return this
 	}
 
 	setLocale(locale) {
-		if (this.#availableLocales.includes(locale)) {
-			this.#locale = locale
+		if (this._availableLocales.includes(locale)) {
+			this._locale = locale
 		} else {
-			this.#logError('localization')
+			this._logError('localization')
 		}
 		return this
 	}
 
 	calc(quantity, unit) {
 		if (this.isValid(this.date)) {
-			const u = this.#units[unit]
+			const u = this._units[unit]
 			const time = this.date.getTime()
 			this.date.setTime(time + quantity * u)
 		}

@@ -124,10 +124,10 @@ export default class RitmDate {
 
 	// Chaining items
 	zone(offset) {
-		if (typeof offset !== 'number') {
+		if (typeof +offset !== 'number') {
 			this.#logError('zone offset, must be number')
 		} else {
-			this.userOffset = offset
+			this.#userOffset = +offset
 		}
 		return this
 	}

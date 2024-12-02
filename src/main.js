@@ -52,7 +52,7 @@ export default class RitmDate {
     }
 
     const getOffset = (offset, userOffset) => {
-      const os = userOffset ?? offset
+      const os = !userOffset ? 0 : offset
       const h = Math.abs(Math.floor(os))
       const m = Math.abs((os % 1).toFixed(1) * 10)
       return `${os >= 0 ? '-' : '+'}${twoDigit(h)}:${twoDigit(m)}`

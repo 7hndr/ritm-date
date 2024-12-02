@@ -274,7 +274,7 @@ function _split2(date, offset, userOffset) {
   };
 
   var getOffset = function getOffset(offset, userOffset) {
-    var os = userOffset !== null && userOffset !== void 0 ? userOffset : offset;
+    var os = !userOffset ? 0 : offset;
     var h = Math.abs(Math.floor(os));
     var m = Math.abs((os % 1).toFixed(1) * 10);
     return "".concat(os >= 0 ? '-' : '+').concat(twoDigit(h), ":").concat(twoDigit(m));

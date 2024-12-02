@@ -159,7 +159,7 @@ var RitmDate = /*#__PURE__*/function () {
       if (typeof +offset !== 'number') {
         _classPrivateMethodGet(this, _logError, _logError2).call(this, 'zone offset, must be number');
       } else {
-        _classPrivateFieldSet(this, _userOffset, +offset);
+        _classPrivateFieldSet(this, _userOffset, +offset * -1);
       }
 
       return this;

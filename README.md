@@ -2,10 +2,11 @@
 
 [![npm version](https://badge.fury.io/js/ritm-date.svg)](https://badge.fury.io/js/ritm-date)
 
-Really lightweight, fast date &amp; time formatter
+Really lightweight, fast date &amp; time formatter.
+Typescript friendly
 
 1. npm install ritm-date
-2. import rDate from 'ritm-date' at your .js file
+2. import rDate from 'ritm-date' at your .js/.ts file
 3. use it
 
 ```js
@@ -50,11 +51,7 @@ rDate(new Date()).format('x')
 rDate(new Date()).format('l')
 // Short format, e.g. for comparing dates
 // Output: 1/2/22 <-- Timestamp
-```
 
-## Utils
-
-```js
 rDate(new Date()).isValid()
 // Output: true
 
@@ -63,7 +60,10 @@ rDate(new Date('grrr!')).isValid()
 
 rDate('string').isValid()
 // Output: false
-
-// Locales: en/ru
-// Available abbreviations for masks YYYY, YY, MMMM, MMM, MM, M, DD, D, dd, ddd, HH, h, mm, ss
 ```
+
+## Utils
+
+**Locales**: en/ru
+
+**Available abbreviations for masks:** YYYY, YY, MMMM, MMM, MM, M, DD, D, dd, ddd, HH, h, mm, ss

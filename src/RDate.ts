@@ -39,7 +39,7 @@ export class RDate {
         return Date.parse(this.date.toString())
 
       default:
-        return formatDate(this.date, formatMasks.default, this.locale)
+        return formatDate(this.date, mask ?? formatMasks.default, this.locale)
     }
   }
 

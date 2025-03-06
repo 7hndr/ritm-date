@@ -36,7 +36,7 @@ export class RDate {
             case 'X':
                 return Date.parse(this.date.toString());
             default:
-                return formatDate(this.date, formatMasks.default, this.locale);
+                return formatDate(this.date, mask !== null && mask !== void 0 ? mask : formatMasks.default, this.locale);
         }
     }
     setLocale(locale) {

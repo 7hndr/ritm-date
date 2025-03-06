@@ -55,17 +55,13 @@ rDate(new Date()).format('l')
 ## Utils
 
 ```js
-...
-rDate().secondsToTime(12213)
-// Output: 03:23:33 (3h, 23m, 33s)
-
-rDate().secondsToTime(123)
-// Output: 00:02:03 (0h, 2m, 3s)
-
-rDate().isValid(new Date())
+rDate(new Date()).isValid()
 // Output: true
 
-rDate().isValid(new Date('grrr!'))
+rDate(new Date('grrr!')).isValid()
+// Output: false
+
+rDate('string').isValid()
 // Output: false
 
 // Locales: en/ru

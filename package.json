@@ -1,10 +1,17 @@
 {
   "name": "ritm-date",
-  "version": "1.1.8",
-  "description": "date & time formatter",
-  "main": "index.js",
+  "version": "2.0",
+  "description": "Date & time lightweight formatter",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "homepage": "https://www.npmjs.com/package/ritm-date",
+  "type": "module",
   "scripts": {
-    "build": "babel src -d dist"
+    "build": "tsc",
+    "build-demo": "tsc && node demo/copy-dist.js && node demo/fix-imports.js",
+    "test": "jest",
+    "lint": "eslint src --fix",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -13,13 +20,24 @@
   "keywords": [
     "date",
     "time",
-    "formatter"
+    "formatter",
+    "typescript",
+    "lightweight",
+    "datetime",
+    "datetime formatter",
+    "ru",
+    "en"
+  ],
+  "files": [
+    "dist"
   ],
   "author": "7hndr",
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.9",
-    "@babel/preset-env": "^7.16.11"
+    "@types/jest": "^29.5.14",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.8.2"
   }
 }

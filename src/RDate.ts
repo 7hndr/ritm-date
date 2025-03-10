@@ -28,7 +28,7 @@ export class RDate {
     }
   }
 
-  format(mask: string): string | number {
+  format(mask?: string): string | number {
     switch (mask) {
       case 'iso':
         return formatDate(this.date, formatMasks.iso, this.locale)

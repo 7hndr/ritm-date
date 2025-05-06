@@ -56,7 +56,7 @@ rDate(new Date()).isValid()
 // Output: true
 // DEPRECATED! output will be Error or true. Please use rDate().isValid(someDate) instead
 
-rDate(new Date('grrr!')).isValid()
+rDate().isValid(new Date('grrr!'))
 // Output: false
 
 rDate().isValid('12:13:56')

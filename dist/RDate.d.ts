@@ -7,5 +7,5 @@ export declare class RDate {
     calc(value: number, unit: 'day' | 'days' | 'hour' | 'hours' | 'minute' | 'minutes'): this;
     zeroing(): this;
     zone(offset: number): this;
-    isValid(): boolean;
+    isValid(_date?: Date | string | number): boolean;
 }

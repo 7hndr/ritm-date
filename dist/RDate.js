@@ -55,7 +55,7 @@ export class RDate {
         this.date = changeTimeZone(this.date, offset);
         return this;
     }
-    isValid() {
-        return isValidDate(this.date);
+    isValid(_date) {
+        return isValidDate(_date !== null && _date !== void 0 ? _date : this.date);
     }
 }

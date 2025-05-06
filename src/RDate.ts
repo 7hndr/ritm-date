@@ -66,7 +66,7 @@ export class RDate {
     return this
   }
 
-  isValid(): boolean {
-    return isValidDate(this.date)
+  isValid(_date?: Date | string | number): boolean {
+    return isValidDate(_date ?? this.date)
   }
 }

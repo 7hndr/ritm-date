@@ -54,11 +54,15 @@ rDate(new Date()).format('l')
 
 rDate(new Date()).isValid()
 // Output: true
+// DEPRECATED! output will be Error or true. Please use rDate().isValid(someDate) instead
 
 rDate(new Date('grrr!')).isValid()
 // Output: false
 
-rDate('string').isValid()
+rDate().isValid('12:13:56')
+// Output: false
+
+rDate().isValid('string')
 // Output: false
 ```
 

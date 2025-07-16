@@ -1,6 +1,6 @@
 {
   "name": "ritm-date",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Date & time lightweight formatter",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
